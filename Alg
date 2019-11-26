@@ -1,0 +1,100 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct item{
+  int cod;
+};
+
+typedef struct item Item;
+
+struct node{
+  Item item;
+  struct node *left;
+  struct node *right;
+};
+
+typedef  struct node Node;
+
+Node *inicializar(){
+  return NULL;
+}
+
+Item itemcreat( int cod){
+  Item item;
+  item.cod = cod;
+  return item;
+}
+
+Node *inserir( Node *root, Item x){
+  if(root == NULL){
+    Node *aux = (Node *)malloc(sizeof(Node));
+    aux-> item = x;
+    aux-> left = NULL;
+    aux-> right = NULL;
+    return aux;
+  }else{
+    if(x.cod > root->item.cod){
+     root -> right = inserir(root->right, x);
+    }else if(x.cod < root -> item.cod){
+      root -> left = inserir(root->left,x);
+    }
+  }
+  return root;
+}
+
+void print(Node *root){
+  if(root != NULL){
+    printf("%d", root->item.cod );
+    print(root->left); 
+    print(root->right);
+
+  }
+}
+
+Node *pesquisa(Node *root, int cod){
+  if(root != NULL){
+    if(root->item.cod == cod) return root;
+    else{
+      if(cod>root ->item.cod) return pesquisa(root->right,cod);
+      else return pesquisa(root->left,cod);
+    }
+  }
+}
+
+
+
+void freet(Node *root){
+  if(root != NULL){
+    print(root->left); 
+    print(root->right);
+    free(root);
+  }
+}
+
+int main(void) {
+ 
+  Node *root = inicializar();
+  root = inserir( root, itemcreat(12));
+  root = inserir( root, itemcreat(8));
+  root = inserir( root, itemcreat(13));
+  root = inserir( root, itemcreat(9));
+  root = inserir( root, itemcreat(14));
+  root = inserir( root, itemcreat(3));
+  root = inserir( root, itemcreat(2));
+  root = inserir( root, itemcreat(81));
+  root = inserir( root, itemcreat(18));
+  root = inserir( root, itemcreat(18));
+  root = inserir( root, itemcreat(7));
+  root = inserir( root, itemcreat(5));
+  
+  
+  Node *tmp = pesquisa(root, 12);
+  if(tmp == NULL ) 
+    printf("elemento n esncontrado\n");
+  else 
+    printf("elemento encontado\n");
+
+  print(root);
+  freet(root);
+  return 0;
+}
